@@ -82,7 +82,7 @@ public class Main {
           latlon.put("lat", this.planesList.getLatMap().get(ip));
           latlon.put("lon", this.planesList.getLonMap().get(ip));
           latlon.put("alt", this.planesList.getAltMap().get(ip));
-          planes.put(ip.replace('.', '-').substring(1) , latlon);
+          planes.put(ip.replace('.', '-').substring(1), latlon);
         }
         StringWriter out = new StringWriter();
         planes.writeJSONString(out);
@@ -92,11 +92,18 @@ public class Main {
         OutputStream os = t.getResponseBody();
         os.write(response.getBytes());
         os.close();
-      }
-      else {
+      } else if (req.equals("/")){
         sendFile(t, "index.html");
+      } else if (getClass().getClassLoader().getResource(getResoureFilename(t.getRequestURI())) != null) {
+        sendFile(t, getResoureFilename(t.getRequestURI()));
+      } else {
+        t.sendResponseHeaders(404, 0);
+        t.close();
       }
+    }
 
+    private String getResoureFilename(URI uri) {
+      return uri.toString().replaceAll("^/", "");
     }
 
     private void sendFile(HttpExchange t, String file) {
