@@ -32,6 +32,7 @@ public class UDPListener implements Runnable {
         if (ident == 20) {
           Float lat = ByteBuffer.wrap(Arrays.copyOfRange(receivePacket.getData(), 9, 13)).order(ByteOrder.LITTLE_ENDIAN).getFloat();
           Float lon = ByteBuffer.wrap(Arrays.copyOfRange(receivePacket.getData(), 13, 17)).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+          if (lat == 0 && lon == 0) continue;
           Float alt = ByteBuffer.wrap(Arrays.copyOfRange(receivePacket.getData(), 17, 21)).order(ByteOrder.LITTLE_ENDIAN).getFloat();
           InetAddress IPAddress = receivePacket.getAddress();
           //System.out.println(IPAddress.toString() + " is at latitude " + lat.toString() + ", longitude " + lon.toString() + ".");
